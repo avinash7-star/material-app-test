@@ -1,6 +1,6 @@
 <div class="example-form">
 
-	<form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
+	<form [formGroup]="userForm" (ngSubmit)="onFormSubmit(formDirective)"  #formDirective="ngForm" >
 		<div class="row">
 			<mat-form-field>
 		    <mat-label>First name</mat-label>
@@ -72,4 +72,4 @@
   <div>{{userList$ | async | json}}</div> -->
 </div>
   
-<app-user-table></app-user-table>
+<app-user-table [userFormValues]="userFormValues"></app-user-table>

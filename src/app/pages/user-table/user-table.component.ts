@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Observable, of } from "rxjs";
 import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
@@ -9,15 +10,29 @@ import { LocalStorageService } from '../../services/local-storage.service';
   styleUrls: ['./user-table.component.scss']
 })
 export class UserTableComponent implements OnInit {
-
+  @Input() userFormValues;
+  userList$: Observable<Element[]> = this.getUserListData();
   displayedColumns = ['select', 'firstname', 'lastname', 'dob', 'gender', 'email'];
+
   data = Object.assign(this.localStorageService.getUserLocalData());
   dataSource = new MatTableDataSource<Element>(this.data);
   selection = new SelectionModel<Element>(true, []);
   constructor(public localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
+    // this.userList$ = this.getUserListData();
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.userFormValues.currentValue) {
+      this.data.push(changes.userFormValues.currentValue);
+      this.dataSource = this.data;
+    }
+    // console.log(changes.value.currentValue);
+  }
+
+  getUserListData(): Observable<Element[]>{
+    return of(this.localStorageService.getUserLocalData());
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

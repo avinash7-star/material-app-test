@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, Validator, Validators, FormGroup} from '@angular/forms';
+import { FormControl, Validator, Validators, FormGroup, FormGroupDirective} from '@angular/forms';
 import { Observable, of } from "rxjs";
 import { LocalStorageService } from '../../services/local-storage.service';
 
@@ -10,8 +10,9 @@ import { LocalStorageService } from '../../services/local-storage.service';
 })
 
 export class DashboardComponent implements OnInit {
-  userList$: Observable<UserVM[]>;
   
+  userList$: Observable<UserVM[]>;
+  userFormValues;
   usernameRegx: any = '[a-zA-Z][a-zA-Z0-9\s]*';
   passwordRegx: any = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*#?^&])[A-Za-z\\d@$!%*#?^&]{8,}$';
   minDate: Date;
@@ -43,11 +44,14 @@ export class DashboardComponent implements OnInit {
     return this.userForm.controls.email.hasError('email') ? 'Not a valid email' : '';
   }
 
-  onFormSubmit(){
+  onFormSubmit(formDirective: FormGroupDirective){
     if (this.userForm.invalid) {
       return;
     }
-    this.setUserLocalData(this.userForm.value);
+    this.userFormValues = this.userForm.value;
+    // formDirective.resetForm();
+    // this.userForm.reset();
+    this.setUserLocalData(this.userFormValues);
   }
 
   /* Shorthands for form controls (used from within template) */
@@ -78,10 +82,9 @@ export class DashboardComponent implements OnInit {
     return JSON.parse(localStorage.getItem('userlist')) || [];
   }
 
-  setUserLocalData(user: any) {
-    /* store user list object in local storage */
+  setUserLocalData(user: any) { /* store user list object in local storage */
     let currectData: any = [];
-    currectData = this.getUserLocalData();
+    currectData = this.localStorageService.getUserLocalData();
     currectData.push(user);
     localStorage.setItem('userlist', JSON.stringify(currectData));
   }
