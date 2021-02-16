@@ -14,17 +14,20 @@ import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from '@angular/material/select';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { UserTableComponent } from './pages/user-table/user-table.component';
+import { ConfirmDialogComponent } from './pages/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    UserTableComponent
+    UserTableComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,7 @@ import { UserTableComponent } from './pages/user-table/user-table.component';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule, MatRippleModule,
+    MatDialogModule,
     MatTableModule,
     FormsModule
   ],

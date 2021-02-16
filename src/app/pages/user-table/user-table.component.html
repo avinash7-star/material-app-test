@@ -1,47 +1,45 @@
-<div class="example-container mat-elevation-z8">
+<div class="example-container mat-elevation-z8" *ngIf="data.length > 0">
   <mat-table #table [dataSource]="dataSource">
   
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
-    <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
-    <mat-cell *matCellDef="let element"> <i class="material-icons">delete</i>
-    </mat-cell>
+        <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
+        <mat-cell *matCellDef="let element;let i = index;" (click)="confirmDialog(i)" class="delete-icon">
+            <i class="material-icons">delete</i>
+        </mat-cell>
     </ng-container>
-    
   
     <!-- Position Column -->
     <ng-container matColumnDef="firstname">
-    <mat-header-cell *matHeaderCellDef> First name </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.firstname}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> First name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.firstname}} {{i}} </mat-cell>
     </ng-container>
   
     <!-- Name Column -->
     <ng-container matColumnDef="lastname">
-    <mat-header-cell *matHeaderCellDef> Last name </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.lastname}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Last name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.lastname}} </mat-cell>
     </ng-container>
   
     <!-- Email Column -->
     <ng-container matColumnDef="email">
-    <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
     </ng-container>
 
     <!-- Weight Column -->
     <ng-container matColumnDef="dob">
-    <mat-header-cell *matHeaderCellDef> Date of birth </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.dob | date: 'mediumDate'}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Date of birth </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.dob | date: 'mediumDate'}} </mat-cell>
     </ng-container>
   
     <!-- Symbol Column -->
     <ng-container matColumnDef="gender">
-    <mat-header-cell *matHeaderCellDef> Gender </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.gender}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Gender </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.gender}} </mat-cell>
     </ng-container>
   
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"
-         (click)="selection.toggle(row)">
-    </mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 </div>

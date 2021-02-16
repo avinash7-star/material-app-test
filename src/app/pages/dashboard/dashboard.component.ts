@@ -11,7 +11,6 @@ import { LocalStorageService } from '../../services/local-storage.service';
 
 export class DashboardComponent implements OnInit {
   
-  userList$: Observable<UserVM[]>;
   userFormValues;
   usernameRegx: any = '[a-zA-Z][a-zA-Z0-9\s]*';
   passwordRegx: any = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*#?^&])[A-Za-z\\d@$!%*#?^&]{8,}$';
@@ -34,7 +33,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userList$ = this.getUserListData();
+
   }
 
   getEmailErrorMessage() {
@@ -49,21 +48,21 @@ export class DashboardComponent implements OnInit {
       return;
     }
     this.userFormValues = this.userForm.value;
-    // formDirective.resetForm();
-    // this.userForm.reset();
-    this.setUserLocalData(this.userFormValues);
+    formDirective.resetForm();
+    this.userForm.reset();
+    this.localStorageService.setUserLocalData(this.userFormValues);
   }
 
   /* Shorthands for form controls (used from within template) */
   get password() { return this.userForm.get('password'); }
-  get password2() { return this.userForm.get('confirm_password'); }
+  get confirmPassword() { return this.userForm.get('confirm_password'); }
 
   /* Called on each input in either password field */
   onPasswordInput() {
     if (this.userForm.hasError('passwordMismatch'))
-      this.password2.setErrors([{'passwordMismatch': true}]);
+      this.confirmPassword.setErrors([{'passwordMismatch': true}]);
     else
-      this.password2.setErrors(null);
+      this.confirmPassword.setErrors(null);
   }
 
   passwordMatchValidator(formGroup: FormGroup){
@@ -73,24 +72,7 @@ export class DashboardComponent implements OnInit {
       return {passwordMismatch: true};
   };
 
-  getUserListData(): Observable<UserVM[]>{
-    return  of(this.getUserLocalData());
-  }
-
-  getUserLocalData(){ 
-    /* retrive user list object from local storage */
-    return JSON.parse(localStorage.getItem('userlist')) || [];
-  }
-
-  setUserLocalData(user: any) { /* store user list object in local storage */
-    let currectData: any = [];
-    currectData = this.localStorageService.getUserLocalData();
-    currectData.push(user);
-    localStorage.setItem('userlist', JSON.stringify(currectData));
-  }
-
 }
-
 
 interface UserVM {
   firstname: string;

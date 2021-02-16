@@ -2,6 +2,8 @@ import { Component, OnInit, SimpleChanges, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Observable, of } from "rxjs";
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
@@ -16,8 +18,9 @@ export class UserTableComponent implements OnInit {
 
   data = Object.assign(this.localStorageService.getUserLocalData());
   dataSource = new MatTableDataSource<Element>(this.data);
-  selection = new SelectionModel<Element>(true, []);
-  constructor(public localStorageService: LocalStorageService) { }
+  
+  constructor(public localStorageService: LocalStorageService,
+    public dialog: MatDialog) { }
 
   ngOnInit(): void {
     // this.userList$ = this.getUserListData();
@@ -35,28 +38,27 @@ export class UserTableComponent implements OnInit {
     return of(this.localStorageService.getUserLocalData());
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+  deleteRow(index: number) { // delete table row
+    this.data.splice(index, 1);
+    this.dataSource = new MatTableDataSource<Element>(this.data);
+    this.localStorageService.updateStorage(this.data);
   }
 
-  removeSelectedRows() {
-    this.selection.selected.forEach(item => {
-      let index: number = this.data.findIndex(d => d === item);
-      console.log(this.data.findIndex(d => d === item));
-      this.data.splice(index, 1);
-      this.dataSource = new MatTableDataSource<Element>(this.data);
+  confirmDialog(index: number) : void { // delete table row
+    const message = `Are you sure you want to delete this ?`;
+
+    const dialogData = new ConfirmDialogModel("Delete Action", message);
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: dialogData
     });
-    this.selection = new SelectionModel<Element>(true, []);
-  }
-  
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.deleteRow(index);
+      }
+    });
   }
 }
 
