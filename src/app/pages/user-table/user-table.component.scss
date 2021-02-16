@@ -1,0 +1,19 @@
+.example-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 300px;
+  margin: auto;
+  width: 60%;
+  border: 1px solid rgba(0, 0, 0, 0.87);
+  padding: 10px;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.mat-column-select {
+  overflow: visible;
+}
